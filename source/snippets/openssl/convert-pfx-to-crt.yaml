@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=../snippet.schema.json
+name: Convert pfx to crt
+command: | # PowerShell
+  openssl pkcs12 -in ${input_pfx_cert} -out ${output_pem_cert} -noenc
+tags:
+- ssl
+- openssl
+description: Convert certificate in PKCS#12 (pfx) container format (private key included) to PEM format (base64)
+tokens:
+- name: input_pfx_cert
+  description: Input certificate file in PKCS#12 container format. Files usually have .pfx or .p12 extensions.
+  default: tls.pfx
+- name: output_pem_cert
+  description: Output certificate file which will be in PEM format. Files usually have .pem, .crt, or .cer extensions.
+  default: tls.crt

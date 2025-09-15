@@ -1,0 +1,32 @@
+<Types>
+  <Type>
+    <Name>PoshCode.Token</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          if ($null -eq $this.default) {
+            $PSStyle.Formatting.FormatAccent + $this.name + $PSStyle.Reset + ": " + $this.description
+          } else {
+            $PSStyle.Formatting.FormatAccent + $this.name + $PSStyle.Reset + ": " + $this.description + $PSStyle.Dim + " (default: " + $PSStyle.Reset + $this.default +  $PSStyle.Dim + ")" + $PSStyle.Reset
+          }
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>PoshCode.Snippet</Name>
+    <Members>
+      <PropertySet>
+        <Name>DefaultProperties</Name>
+        <ReferencedProperties>
+          <Name>Name</Name>
+          <Name>Description</Name>
+          <Name>Tags</Name>
+          <Name>Command</Name>
+          <Name>Tokens</Name>
+        </ReferencedProperties>
+      </PropertySet>
+    </Members>
+  </Type>
+</Types>

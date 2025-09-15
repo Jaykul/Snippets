@@ -1,0 +1,10 @@
+# ignore output (because we put stuff there)
+/Modules/
+# Ignore version number folders (these are our intermediate "output" directories for testing)
+/[0-9]*/
+# ignore binary output files and folders
+bin/
+obj/
+lib/
+# ignore visual studio artifacts
+*.generated.*

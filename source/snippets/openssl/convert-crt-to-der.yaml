@@ -1,0 +1,14 @@
+name: Convert crt to der
+command: | # PowerShell
+  openssl x509 -inform pem -outform der -in ${input_pem_cert} -out ${output_der_cert}
+tags:
+- ssl
+- openssl
+description: Convert a certificate from PEM format (base64) to DER binary encoding
+tokens:
+- name: input_pem_cert
+  description: Input file (in PEM format). Files usually have .crt, .pem, or .cer extensions.
+  default: cert.crt
+- name: output_der_cert
+  description: Output file which will be DER encoded. Files usually have .der or .cer extensions.
+  default: cert.der

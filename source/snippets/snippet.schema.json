@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the snippet"
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of what the snippet does"
+    },
+    "command": {
+      "type": "string",
+      "description": "The command to run for the snippet"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags to categorize the snippet"
+    },
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the token"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of what the token is for"
+          },
+          "default": {
+            "type": "string",
+            "description": "The default value for the token"
+          }
+        },
+        "required": ["name", "description"],
+        "additionalProperties": false
+      },
+      "description": "Tokens to be replaced in the command"
+    },
+    "additionalProperties": false
+  },
+  "required": ["name", "command"],
+  "additionalProperties": false
+}

@@ -1,0 +1,20 @@
+name: Convert crt to pfx
+command: | # PowerShell
+  openssl pkcs12 -export -out ${output_pfx_cert} -in ${input_pem_cert} -inkey ${input_pem_private_key} -certfile ${input_pem_cacert}
+tags:
+- ssl
+- openssl
+description: Convert certificate from separate (base64) crt and key to PKCS#12 container format (pfx or p12 with the private key included)
+tokens:
+- name: input_pem_cert
+  description: The certificate file in PEM format. Files usually have .crt, .pem, or .cer extensions.
+  default: tls.crt
+- name: input_pem_private_key
+  description: The private key file (in base64 PEM format) for the certificate. Files usually have .key extension.
+  default: tls.key
+- name: input_pem_cacert
+  description: The certificate file (or file bundle) of Certification Authority (in PEM format) which signed input_pem_cert file. Files usually have .crt, .pem, or .cer extensions.
+  default: ca.crt
+- name: output_pfx_cert
+  description: Output file which will be a PKCS#12 container. Files usually have .pfx or .p12 extension.
+  default: cert.pfx

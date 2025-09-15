@@ -1,0 +1,23 @@
+name: Generate self-signed certificate
+command: | # PowerShell
+  openssl req -x509 -newkey rsa:4096 -keyout ${key_file} -out ${cert_file} -sha256 -days ${expiration_days} --subj "${subject}" ${extensions}
+tags:
+- ssl
+- openssl
+description: "Generates a self-signed CA SSL certificate using OpenSSL. Self-signed certificates are obviously not valid anywhere, but they can be useful for testing. To make it a simple server certificate, just remove the '-extensions v3_ca' part. To avoid being prompted for a passphrase and encrypting the private key, add the '-noenc' switch."
+tokens:
+- name: key_file
+  description: The file name to write the private key to
+  default: tls.key
+- name: cert_file
+  description: The file name to write the public certificate to
+  default: tls.crt
+- name: expiration_days
+  description: The number of days until the certificate expires
+  default: '"365"'
+- name: subject
+  description: The subject field for the certificate, i.e. "/C=US/ST=State/L=City/O=Organization/OU=Unit/CN=CommonName"
+  default: "/C=US/ST=NY/L=Rochester/O=Xerox/OU=DevOps/CN=Root CA"
+- name: extensions
+  description: Additional parameters, e.g. "-extensions v3_ca" for a CA certificate, or "-noenc" to avoid encrypting the private key
+  default: "-extensions v3_ca -noenc"

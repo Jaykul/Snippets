@@ -1,0 +1,49 @@
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>Snippet-Preview</Name>
+            <ViewSelectedBy>
+                <TypeName>PoshCode.Snippet</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>Name</Label>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Description</Label>
+                                <PropertyName>Description</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Tags</Label>
+                                <PropertyName>Tags</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Command</Label>
+                                <ScriptBlock>Show-Code $_.Command.ToString()</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Tokens</Label>
+                                <ScriptBlock>
+                                  $PSReadLineTheme = Get-PSReadLineTheme
+                                  @(
+                                    foreach($token in $_.Tokens) {
+                                      if ($null -eq $token.default) {
+                                        $PSReadLineTheme.VariableColor + $token.name + $PSStyle.Reset + ": " + $token.description
+                                      } else {
+                                        $PSReadLineTheme.VariableColor + $token.name + $PSStyle.Reset + ": " + $token.description + $PSStyle.Dim + " (default: " + $PSStyle.Reset + $token.default +  $PSStyle.Dim + ")" + $PSStyle.Reset
+                                      }
+                                    }
+                                  ) -join "`n"
+                                </ScriptBlock>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>

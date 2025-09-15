@@ -1,0 +1,7 @@
+name: List container images
+description: List all container images in the whole kubernetes cluster
+command: | # PowerShell
+  kubectl get pods --all-namespaces -o go-template --template="{{range .items}}{{range .spec.containers}}{{.image}}`n{{end}}{{end}}"
+tags:
+- kubectl
+- containers
