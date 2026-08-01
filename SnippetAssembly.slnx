@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/source/">
+    <Project Path="source/predictor/SnippetPredictor.csproj" />
+  </Folder>
+</Solution>

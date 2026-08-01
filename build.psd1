@@ -4,5 +4,5 @@
     ModuleManifest           = "./Source/Snippets.psd1"
     OutputDirectory          = "../Modules"
     VersionedOutputDirectory = $true
-    CopyDirectories          = @('snippets', './lib/*.dll','Snippets.format.ps1xml', 'Snippets.types.ps1xml')
+    CopyDirectories          = @('../snippets', 'Snippets.format.ps1xml', 'Snippets.types.ps1xml')
 }
