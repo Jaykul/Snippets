@@ -34,7 +34,7 @@ namespace PoshCode
             Snippets.Clear();
             Snippets.AddRange(
                 snippetLoader.LoadSnippets(
-                    Path.Combine(Path.GetDirectoryName(typeof(SnippetPredictor).Assembly.Location)!, "snippets")));
+                    Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(typeof(SnippetPredictor).Assembly.Location))!, "snippets")));
             Snippets.AddRange(
                 snippetLoader.LoadSnippets(
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PoshCode", "Snippets")));

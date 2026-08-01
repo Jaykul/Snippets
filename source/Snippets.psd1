@@ -20,11 +20,11 @@
 
     Description          = 'PowerShell Code Snippets UX!'
     ScriptsToProcess     = @()
-    FunctionsToExport    = @('ImportSnippet', 'LoadSnippet')
-    CmdletsToExport      = @()
+    FunctionsToExport    = @()
+    CmdletsToExport      = @('Get-Snippet', 'Add-Snippet')
     VariablesToExport    = @()
     AliasesToExport      = @()
-    NestedModules        = @("SnippetPredictor.dll")
+    NestedModules        = @("lib/SnippetPredictor.dll")
     RequiredModules      = @(
         @{ ModuleName = "Theme.PSReadLine"; ModuleVersion = "0.3.0" }
         @{ ModuleName = "Yayaml";           ModuleVersion = "0.5.0" }
