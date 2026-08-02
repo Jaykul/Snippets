@@ -13,7 +13,7 @@ namespace PoshCode
 
         public required string[] Tags { get; set; }
 
-        public Token[]? Tokens { get; set; }
+        public Token[] Tokens { get; set; } = Array.Empty<Token>();
 
         public Collection<PSObject> Invoke(EngineIntrinsics executionContext)
         {

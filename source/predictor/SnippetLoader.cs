@@ -28,6 +28,7 @@ namespace PoshCode
             {
                 var yamlContent = File.ReadAllText(file);
                 var snippet = _deserializer.Deserialize<Snippet>(yamlContent);
+                snippet.Command = snippet.Command.Trim();
                 yield return snippet;
             }
         }
