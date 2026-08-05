@@ -21,9 +21,9 @@
         <Name>DefaultProperties</Name>
         <ReferencedProperties>
           <Name>Name</Name>
+          <Name>Command</Name>
           <Name>Description</Name>
           <Name>Tags</Name>
-          <Name>Command</Name>
           <Name>Tokens</Name>
         </ReferencedProperties>
       </PropertySet>

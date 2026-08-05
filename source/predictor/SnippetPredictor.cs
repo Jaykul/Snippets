@@ -74,6 +74,10 @@ namespace PoshCode
             {
                 return default;
             }
+            // TODO: if the <# Name #> matches exactly, only return that one snippet
+            // TODO: figure out where the cursor is, can we CHANGE THE TOOLTIP accordingly to help out?
+            // If it's in the spot where a token is (or was), show THAT token description
+            // If it's on or after a parameter for a function, show THAT parameter help
 
             return new SuggestionPackage(Filter(input).Select(s => s.ToSuggestion()).ToList());
         }

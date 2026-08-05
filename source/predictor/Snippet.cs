@@ -43,7 +43,7 @@ namespace PoshCode
             return deserializer.Deserialize<Snippet>(yaml);
         }
 
-        internal PredictiveSuggestion ToSuggestion() => new PredictiveSuggestion("<# " + Name + " #> " + Command.Trim(), Description + "Tags: [@" + string.Join(", @", Tags) + "]");
+        internal PredictiveSuggestion ToSuggestion() => new PredictiveSuggestion("<# " + Name + " #> " + Command.Trim(), Description + (Tokens.Length > 0 ? "\n" + string.Join("\n  ", Tokens.Select(t => "${" + t.Name + "}: " + t.Description)) : "") + "\nTags: [@" + string.Join(", @", Tags) + "]" );
     }
 
     public class Token
