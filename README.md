@@ -6,7 +6,7 @@ I'm just playing with some ideas for how to do snippets in PowerShell. This is a
 
 My first idea was to [write a predictor](https://learn.microsoft.com/en-us/powershell/scripting/dev-cross-plat/create-cmdline-predictor) that would suggest snippets based on what you type.
 
-This is implemented in the `SnippetPredictor` class.
+This is implemented in the `PoshCode.Snippets.Predictor` class.
 
 With the module loaded, you _search_ for snippets by starting to type the _name_ as a comment, or by typing a `@tag` to filter:
 

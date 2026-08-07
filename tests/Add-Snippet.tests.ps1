@@ -11,8 +11,8 @@ Describe 'Add-Snippet' {
         $script:snippetRoot = Join-Path $script:AppData 'PoshCode' 'Snippets'
         $script:uniqueId = [guid]::NewGuid().ToString('N')
 
-        [PoshCode.SnippetPredictor]::Instance.Snippets.Clear()
-        [PoshCode.SnippetPredictor]::Instance.LoadSnippets()
+        [PoshCode.Snippets.Predictor]::Instance.Snippets.Clear()
+        [PoshCode.Snippets.Predictor]::Instance.LoadSnippets()
     }
 
     AfterEach {
@@ -30,7 +30,7 @@ Describe 'Add-Snippet' {
         $filePath | Should -Exist
         (Get-Content -Path $filePath -Raw) | Should -Match 'name:'
         (Get-Content -Path $filePath -Raw) | Should -Match 'command: Write-Host "hello"'
-        ([PoshCode.SnippetPredictor]::Instance.Snippets | Where-Object Name -EQ $uniqueId).Count | Should -Be 1
+        ([PoshCode.Snippets.Predictor]::Instance.Snippets | Where-Object Name -EQ $uniqueId).Count | Should -Be 1
     }
 
     It 'creates the folder when -Force is specified' {

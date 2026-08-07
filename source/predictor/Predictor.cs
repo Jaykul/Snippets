@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Management.Automation.Subsystem.Prediction;
 using System.Text.RegularExpressions;
+using System.Management.Automation.Language;
 
-namespace PoshCode
+namespace PoshCode.Snippets
 {
-    public partial class SnippetPredictor : ICommandPredictor
+    public partial class Predictor : ICommandPredictor
     {
-        private readonly Guid _guid;
-
         public List<Snippet> Snippets { get; } = new List<Snippet>();
 
         [GeneratedRegex(@"@(?<tag>\w+)")]
@@ -18,10 +17,15 @@ namespace PoshCode
         [GeneratedRegex(@"[#\s](?<name>\w+)")]
         private static partial Regex NamePattern();
 
+        [GeneratedRegex(@"<#\s+(?<name>\S+.*\S+)\s+#>")]
+        private static partial Regex FullNamePattern();
 
-        internal SnippetPredictor(string guid)
+        [GeneratedRegex(@"\\\$\\\{(?<name>[^}]|`.)+}")]
+        private static partial Regex VariableTokenPattern();
+
+
+        internal Predictor()
         {
-            _guid = new Guid(guid);
             LoadSnippets();
         }
 
@@ -34,16 +38,16 @@ namespace PoshCode
             Snippets.Clear();
             Snippets.AddRange(
                 snippetLoader.LoadSnippets(
-                    Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(typeof(SnippetPredictor).Assembly.Location))!, "snippets")));
+                    Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(typeof(Predictor).Assembly.Location))!, "snippets")));
             Snippets.AddRange(
                 snippetLoader.LoadSnippets(
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PoshCode", "Snippets")));
         }
 
-        /// <summary>
-        /// Gets the unique identifier for a subsystem implementation.
-        /// </summary>
-        public Guid Id => _guid;
+        /// <inhericdoc />
+        public Guid Id => Identifier;
+
+        internal static readonly Guid Identifier = new Guid("783ec6aa-0cf1-43ad-a177-16262b1a3da3");
 
         /// <summary>
         /// Gets the name of a subsystem implementation.
@@ -74,17 +78,47 @@ namespace PoshCode
             {
                 return default;
             }
-            // TODO: if the <# Name #> matches exactly, only return that one snippet
-            // TODO: figure out where the cursor is, can we CHANGE THE TOOLTIP accordingly to help out?
-            // If it's in the spot where a token is (or was), show THAT token description
-            // If it's on or after a parameter for a function, show THAT parameter help
+            // We cannot tell where the cursor is (PSReadLine assumes it's at the end)...
+            var variableTokens = context.InputAst.FindAll(ast => ast is VariableExpressionAst && ast.Extent.Text.StartsWith("${"), true).Index();
 
-            return new SuggestionPackage(Filter(input).Select(s => s.ToSuggestion()).ToList());
+            var filteredSnippets = Filter(input);
+            if (filteredSnippets.Count() == 1)
+            {
+                var s = filteredSnippets.First();
+                // TODO: if any tokens have already been replaced, we would like to show the actual text, with the description from the token
+                // If it's in the spot where a token is (or was), show THAT token description
+                // If it's on or after a parameter for a function, show THAT parameter help
+
+                var onlyPrediction = new PredictiveSuggestion(context.InputAst.Extent.Text, string.Join("\n",
+                                            s.Tokens.OrderBy(t => variableTokens.FirstOrDefault(v => v.Item.Extent.Text.Contains(t.Name), (int.MaxValue, null)).Index)
+                                                .Select(t => "${" + t.Name + "}: " + t.Description)));
+
+                return new SuggestionPackage(new List<PredictiveSuggestion> { onlyPrediction });
+            }
+
+            return new SuggestionPackage(
+                        filteredSnippets.Select(
+                    s => new PredictiveSuggestion(
+                        "<# " + s.Name + " #> " + s.Command.Trim(), s.Description
+                        + "\nTags: [@" + string.Join(", @", s.Tags) + "]"
+                        + (s.Tokens.Count() > 0 ? "\n" + string.Join("\n", s.Tokens.Select(t => "${" + t.Name + "}: " + t.Description)) : "")
+                        )).ToList());
         }
 
         public IEnumerable<Snippet> Filter(string input)
         {
             var filtered = Snippets.AsEnumerable();
+
+            // if the <# Name #> matches exactly, only return that one snippet
+            var exactMatch = FullNamePattern().Match(input);
+            if (exactMatch.Success)
+            {
+                var name = exactMatch.Groups["name"].Value;
+                return from s in filtered
+                       where s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+                       select s;
+            }
+
             var searchTags = TagPattern().Matches(input).ToList().ConvertAll(m => m.Groups["tag"].Value);
             var searchName = NamePattern().Matches(input).ToList().ConvertAll(m => m.Groups["name"].Value);
 
@@ -153,6 +187,6 @@ namespace PoshCode
 
         #endregion;
 
-        public static SnippetPredictor Instance { get; internal set; } = new SnippetPredictor(Init.Identifier);
+        public static Predictor Instance { get; internal set; } = new Predictor();
     }
 }

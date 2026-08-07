@@ -3,7 +3,7 @@ using System.IO;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace PoshCode
+namespace PoshCode.Snippets
 {
     public class SnippetLoader
     {

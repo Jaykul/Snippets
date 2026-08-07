@@ -1,13 +1,13 @@
 ﻿using System.Management.Automation;
 
-namespace PoshCode
+namespace PoshCode.Snippets
 {
     [Cmdlet(VerbsCommon.Get, "Snippet")]
     public partial class GetSnippet : PSCmdlet
     {
         override protected void ProcessRecord()
         {
-            var predictor = SnippetPredictor.Instance;
+            var predictor = Predictor.Instance;
             if (predictor == null)
             {
                 WriteError(new ErrorRecord(
