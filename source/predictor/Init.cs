@@ -1,22 +1,20 @@
 using System.Management.Automation;
 using System.Management.Automation.Subsystem;
+using System.Management.Automation.Subsystem.Prediction;
 
-namespace PoshCode
+namespace PoshCode.Snippets
 {
     /// <summary>
     /// Register the predictor on module loading and unregister it on module un-loading.
     /// </summary>
     public class Init : IModuleAssemblyInitializer, IModuleAssemblyCleanup
     {
-        internal const string Identifier = "783ec6aa-0cf1-43ad-a177-16262b1a3da3";
-
         /// <summary>
         /// Gets called when assembly is loaded.
         /// </summary>
         public void OnImport()
         {
-            // SnippetPredictor.Instance = new SnippetPredictor(Identifier);
-            SubsystemManager.RegisterSubsystem(SubsystemKind.CommandPredictor, SnippetPredictor.Instance);
+            SubsystemManager.RegisterSubsystem(SubsystemKind.CommandPredictor, Predictor.Instance);
         }
 
         /// <summary>
@@ -24,7 +22,7 @@ namespace PoshCode
         /// </summary>
         public void OnRemove(PSModuleInfo psModuleInfo)
         {
-            SubsystemManager.UnregisterSubsystem(SubsystemKind.CommandPredictor, new Guid(Identifier));
+            SubsystemManager.UnregisterSubsystem<ICommandPredictor>(Predictor.Identifier);
         }
     }
 }
